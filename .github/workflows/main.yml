@@ -22,7 +22,10 @@ jobs:
             cp "$IMG_REPLACEMENT" "$file"    #remplace si corrompu
           fi
         done
-
+    - name: commit change
+      run: |
+        git add .
+        git commit -m "modif file"
 
   build-memory:
     runs-on: self-hosted

@@ -23,6 +23,7 @@ jobs:
           fi
         done
 
+
   build-memory:
     runs-on: self-hosted
     needs: test-memory
@@ -33,6 +34,7 @@ jobs:
 
     - name: build img docker
       run: docker build -t lozan0/memory .
+
 
   push_memory:
     runs-on: self-hosted
@@ -49,3 +51,26 @@ jobs:
       run: |
         docker tag lozan0/memory ${{ secrets.DOCKER_USERNAME }}/memory:latest
         docker push ${{ secrets.DOCKER_USERNAME }}/memory:latest
+
+
+  deploy-memory:
+    runs-on: self-hosted
+    needs: push_memory
+
+    steps:
+    - name: verif code
+      uses: actions/checkout@v2
+
+    - name:
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        HOST: 192.168.249.137
+        USER: user
+      run: |
+        eval "$(ssh-agent -s)"
+        echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+
+        ssh -o StrictHostKeyChecking=no $USER@$HOST << 'EOF'
+          docker pull lozan0/memory
+          docker run --name pull1 -d -p 80:80 lozan0/memory
+        EOF

@@ -14,4 +14,4 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Verif fichier jpg
-       run: echo "FONCTIONNE"
+      run: echo "FONCTIONNE"

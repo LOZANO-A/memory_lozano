@@ -1,0 +1,6 @@
+name: Workflow_tp_memory # Nom du workflow
+
+on:
+  push:
+    branches:
+      - develop # Le workflow se déclenche sur un push vers la branche 'develop'

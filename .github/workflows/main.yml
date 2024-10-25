@@ -1,0 +1,85 @@
+name: Workflow_tp_memory    # Nom du workflow
+
+on:
+  push:
+    branches:
+      - develop    # Le workflow se déclenche sur un push vers la branche 'develop'
+
+jobs:
+  test-memory:
+    runs-on: self-hosted
+
+    steps:
+    - name: Verif code
+      uses: actions/checkout@v2
+
+    - name: Verif fichier jpg
+      run: |
+        IMG_REPLACEMENT="/home/user/memory_lozano/img_st.jpg"    #cherche l'image de remplacement
+        for file in $(find . -name '*.jpg'); do    #trouve et verifie les fich>           echo "Vérification de $file"
+          if ! file "$file" | grep -q 'JPEG'; then
+            echo "$file est corrompu. Remplacement..."
+            cp "$IMG_REPLACEMENT" "$file"    #remplace si corrompu
+          fi
+        done
+    - name: commit change
+      run: |
+        git add .
+        if ! git diff --cached --quiet; then
+          git commit -m "Remplacement des fichiers JPEG corrompus"
+        else
+          echo "Aucun changement à committer"
+        fi
+
+
+
+  build-memory:
+    runs-on: self-hosted
+    needs: test-memory
+
+    steps:
+    - name: Verif code
+      uses: actions/checkout@v2
+
+    - name: build img docker
+      run: docker build -t lozan0/memory .
+
+
+  push_memory:
+    runs-on: self-hosted
+    needs: build-memory
+
+    steps:
+    - name: verif code
+      uses: actions/checkout@v2
+
+    - name: Log in to Docker Hub            #Connexion dockerHub
+      run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+    - name: push_img_to_dockerHub
+      run: |
+        docker tag lozan0/memory ${{ secrets.DOCKER_USERNAME }}/memory:latest
+        docker push ${{ secrets.DOCKER_USERNAME }}/memory:latest
+
+
+  deploy-memory:
+    runs-on: self-hosted
+    needs: push_memory
+
+    steps:
+    - name: verif code
+      uses: actions/checkout@v2
+
+    - name:
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        HOST: 127.0.0.1
+        USER: user
+      run: |
+        eval "$(ssh-agent -s)"
+        echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+
+        ssh -o StrictHostKeyChecking=no $USER@$HOST << 'EOF'
+          cd /home/user/memory_lozano
+          docker-compose up -d
+        EOF

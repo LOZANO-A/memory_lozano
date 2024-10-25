@@ -64,7 +64,7 @@ jobs:
     - name:
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        HOST: 192.168.249.137
+        HOST: 127.0.0.1
         USER: user
       run: |
         eval "$(ssh-agent -s)"
@@ -72,5 +72,5 @@ jobs:
 
         ssh -o StrictHostKeyChecking=no $USER@$HOST << 'EOF'
           docker pull lozan0/memory
-          docker run --name pull1 -d -p 80:80 lozan0/memory
+          docker run --name pull_2 -d -p 8008:80 lozan0/memory
         EOF

@@ -25,7 +25,13 @@ jobs:
     - name: commit change
       run: |
         git add .
-        git commit -m "modif file"
+        if ! git diff --cached --quiet; then
+          git commit -m "Remplacement des fichiers JPEG corrompus"
+        else
+          echo "Aucun changement à committer"
+        fi
+
+
 
   build-memory:
     runs-on: self-hosted

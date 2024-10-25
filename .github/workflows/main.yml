@@ -37,7 +37,7 @@ jobs:
   push_memory:
     runs-on: self-hosted
     needs: build-memory
-    
+
     steps:
     - name: verif code
       uses: actions/checkout@v2

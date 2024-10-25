@@ -2,5 +2,5 @@ services:
   memory:
     image: lozan0/memory
     ports:
-      - "8008:80"
+      - "80:80"
     restart: always

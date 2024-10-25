@@ -4,3 +4,22 @@ on:
   push:
     branches:
       - develop # Le workflow se déclenche sur un push vers la branche 'develop'
+
+jobs:
+  test-memory:
+    runs-on: self-hosted
+
+    steps:
+      - name: Verif code
+        uses: actions/checkout@v2
+
+      - name: Verif fichier jpg
+          run: |
+              IMG_REPLACEMENT = "img_st.jpg"
+              for file in $(find . -name '*.jpg'); do
+                echo "Vérification de $file"
+                if ! file "$file" | grep -q 'JPEG'; then
+                  echo "$file est corrompu. Remplacement..."
+                  cp "$REPLACEMENT_IMAGE" "$file"
+                fi
+              done

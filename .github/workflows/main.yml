@@ -45,4 +45,4 @@ jobs:
     - name: push_img_to_dockerHub
       run: |
         docker tag memory_lozano ${{ secrets.DOCKER_USERNAME }}/memory_lozano:latest
-        docker push ${{ secrets.DOCKER_USERNAME }}/docker_nginx_lzn:latest
+        docker push ${{ secrets.DOCKER_USERNAME }}/memory_lozano:latest

@@ -1,0 +1,12 @@
+name: test_runner
+on:
+  push:
+    branches:
+      - develop
+jobs:
+  test:
+    runs-on: self-hosted
+
+    steps:
+      - name: Vérifier le runner
+        run: echo "Le runner fonctionne correctement !"

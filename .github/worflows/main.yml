@@ -1,9 +1,9 @@
-name: Workflow_tp_memory # Nom du workflow
+name: Workflow_tp_memory    # Nom du workflow
 
 on:
   push:
     branches:
-      - develop # Le workflow se déclenche sur un push vers la branche 'develop'
+      - develop    # Le workflow se déclenche sur un push vers la branche 'develop'
 
 jobs:
   test-memory:
@@ -15,11 +15,11 @@ jobs:
 
       - name: Verif fichier jpg
           run: |
-              IMG_REPLACEMENT = "img_st.jpg"
-              for file in $(find . -name '*.jpg'); do
+              IMG_REPLACEMENT = "img_st.jpg"    #cherche l'image de remplacement
+              for file in $(find . -name '*.jpg'); do    #trouve et verifie les ficher jpg
                 echo "Vérification de $file"
                 if ! file "$file" | grep -q 'JPEG'; then
                   echo "$file est corrompu. Remplacement..."
-                  cp "$REPLACEMENT_IMAGE" "$file"
+                  cp "$REPLACEMENT_IMAGE" "$file"    #remplace si corrompu
                 fi
               done

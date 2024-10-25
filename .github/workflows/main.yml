@@ -25,7 +25,7 @@ jobs:
 
   build-memory:
     runs-on: self-hosted
-    nedds: test-memory
+    needs: test-memory
 
     steps:
     - name: Verif code

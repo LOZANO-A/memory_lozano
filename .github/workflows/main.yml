@@ -23,3 +23,13 @@ jobs:
           fi
         done
 
+  build-memory:
+    runs-on: self-hosted
+    nedds: test-memory
+
+    steps:
+    - name: Verif code
+      uses: actions/checkout@v2
+
+    - name: build img docker
+      run: docker buils -t lozan0/memory .

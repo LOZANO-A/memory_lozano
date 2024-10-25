@@ -33,3 +33,16 @@ jobs:
 
     - name: build img docker
       run: docker build -t lozan0/memory .
+
+  push_memory:
+    runs-on: self-hosted
+    needs: build-memory
+    
+    steps:
+    - name: verif code
+      uses: actions/checkout@v2
+
+    - name: push_img_to_dockerHub
+      run: |
+        docker tag memory_lozano ${{ secrets.DOCKER_USERNAME }}/memory_lozano:latest
+        docker push ${{ secrets.DOCKER_USERNAME }}/docker_nginx_lzn:latest

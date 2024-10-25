@@ -71,6 +71,6 @@ jobs:
         echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
 
         ssh -o StrictHostKeyChecking=no $USER@$HOST << 'EOF'
-          docker pull lozan0/memory
-          docker run --name pull_2 -d -p 8008:80 lozan0/memory
+          cd /home/user/memory_lozano
+          docker-compose up -d
         EOF
